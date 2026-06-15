@@ -37,15 +37,13 @@ body{background:#f5ede6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .j-mantext{font-family:Georgia,serif;font-size:14px;font-style:italic;color:#f5ede6;line-height:1.9;}
 .j-manbrand{display:block;font-style:normal;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#c9b5a0;margin-top:1rem;opacity:0.6;}
 /* HOMEPAGE */
-#jhome{min-height:92vh;display:flex;align-items:center;justify-content:center;}
-.j-home-card{background:#e8ddd4;border-radius:20px;padding:3.5rem 2.5rem;text-align:center;max-width:480px;width:100%;}
-.j-home-tag{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#7a5c48;margin-bottom:2rem;}
-.j-home-title{font-family:Georgia,serif;font-size:34px;font-weight:500;color:#3d2414;line-height:1.25;margin-bottom:0.5rem;}
-.j-home-sub{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#7a5c48;margin-bottom:2.25rem;}
-.j-home-rule{width:36px;height:0.5px;background:#7a5c48;margin:0 auto 2.25rem;}
-.j-home-man{font-family:Georgia,serif;font-size:14px;font-style:italic;color:#5c3d28;line-height:1.9;margin-bottom:2.5rem;}
-.j-home-btn{background:#3d2414;color:#f5ede6;border:none;border-radius:12px;padding:14px 32px;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;font-family:inherit;}
-.j-home-btn:hover{opacity:0.9;}
+#jhome{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5ede6;overflow:hidden;position:relative;padding:0;margin:0;}
+.j-home-her{position:absolute;font-family:Georgia,serif;font-size:28px;font-weight:500;letter-spacing:0.08em;user-select:none;pointer-events:none;color:#c9b5a0;}
+.j-home-inner{position:relative;z-index:2;text-align:center;width:100%;padding:2rem;}
+.j-home-title{font-family:Georgia,serif;font-size:clamp(42px,8vw,96px);font-weight:500;color:#3d2414;letter-spacing:-0.01em;line-height:1.15;margin-bottom:1.25rem;text-align:center;width:100%;display:block;}
+.j-home-sub{font-size:clamp(10px,1.2vw,12px);letter-spacing:0.35em;text-transform:uppercase;color:#7a5c48;margin-bottom:4rem;display:block;}
+.j-home-btn{background:transparent;border:none;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#7a5c48;cursor:pointer;font-family:inherit;padding:0;border-bottom:0.5px solid #c9b5a0;padding-bottom:3px;}
+.j-home-btn:hover{color:#3d2414;border-color:#3d2414;}
 #jmain{display:none;}
 #jmain.open{display:block;}
 /* MEALS */
@@ -135,13 +133,11 @@ body{background:#f5ede6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </head>
 <body>
 <div id="jhome">
-  <div class="j-home-card">
-    <p class="j-home-tag">The Intentional Woman</p>
-    <h1 class="j-home-title">Your week,<br>on your terms.</h1>
-    <p class="j-home-sub">Weekly journal</p>
-    <div class="j-home-rule"></div>
-    <p class="j-home-man">"She isn't who she was.<br>She's who she's becoming.<br>This is where it starts."</p>
-    <button class="j-home-btn" onclick="document.getElementById('jhome').style.display='none';document.getElementById('jmain').classList.add('open');">Open your journal →</button>
+  <div class="j-home-her" id="j-her">HER</div>
+  <div class="j-home-inner">
+    <h1 class="j-home-title">The Intentional<br>Woman</h1>
+    <span class="j-home-sub">Weekly journal</span>
+    <button class="j-home-btn" onclick="document.getElementById('jhome').style.display='none';document.getElementById('jmain').classList.add('open');">Enter →</button>
   </div>
 </div>
 <div id="jmain">
@@ -285,16 +281,54 @@ const FACES=[
 const MEALS={Monday:{Breakfast:'e.g. scrambled eggs + toast',Lunch:'e.g. grilled chicken + rice',Dinner:'e.g. baked salmon + roasted veg'},Tuesday:{Breakfast:'e.g. oatmeal + berries',Lunch:'e.g. turkey wrap + side salad',Dinner:'e.g. ground beef + pasta'},Wednesday:{Breakfast:'e.g. Greek yogurt + granola',Lunch:'e.g. tuna salad + crackers',Dinner:'e.g. chicken thighs + roasted potatoes'},Thursday:{Breakfast:'e.g. smoothie + boiled eggs',Lunch:'e.g. leftovers + side salad',Dinner:'e.g. shrimp + brown rice + broccoli'},Friday:{Breakfast:'e.g. avocado toast + eggs',Lunch:'e.g. cottage cheese + fruit',Dinner:'e.g. steak + sweet potato'},Saturday:{Breakfast:'e.g. protein pancakes + fruit',Lunch:'e.g. veggie omelette + toast',Dinner:'e.g. homemade burgers + salad'},Sunday:{Breakfast:'e.g. açaí bowl + granola',Lunch:'e.g. chicken soup + bread',Dinner:'e.g. roasted chicken + sweet potato'}};
 let week=1,savedQ=[],curQ='';
 function jTab(name,el){document.querySelectorAll('.j-page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.j-tab').forEach(t=>t.classList.remove('active'));document.getElementById('jp-'+name).classList.add('active');el.classList.add('active');}
-function buildMeals(){const c=document.getElementById('jdays');c.innerHTML='';Object.entries(MEALS).forEach(([day,ph])=>{const block=document.createElement('div');block.className='j-db';const title=document.createElement('div');title.className='j-dt';title.textContent=day;block.appendChild(title);const els={};['Breakfast','Lunch','Dinner'].forEach(meal=>{const row=document.createElement('div');row.className='j-mr';const lbl=document.createElement('div');lbl.className='j-ml';lbl.textContent=meal;row.appendChild(lbl);const wrap=document.createElement('div');wrap.className='j-mw';const inp=document.createElement('input');inp.className='j-mi';inp.type='text';inp.placeholder=ph[meal];wrap.appendChild(inp);const fb=document.createElement('button');fb.className='j-fb';fb.textContent='Fasting';const ub=document.createElement('button');ub.className='j-ub';ub.textContent='undo';fb.onclick=()=>{inp.value='Fasting';inp.readOnly=true;inp.classList.add('fasting');fb.style.display='none';ub.classList.add('on');};ub.onclick=()=>{inp.value='';inp.readOnly=false;inp.classList.remove('fasting');fb.style.display='';ub.classList.remove('on');inp.focus();};wrap.appendChild(fb);wrap.appendChild(ub);row.appendChild(wrap);els[meal]=row;block.appendChild(row);});const sb=document.createElement('button');sb.className='j-sab';sb.innerHTML='+ Add snack';const pp=document.createElement('div');pp.className='j-sp';let snackRow=null;sb.onclick=()=>{if(!snackRow)pp.classList.add('on');};['After breakfast','After lunch','After dinner'].forEach(pos=>{const pb=document.createElement('button');pb.className='j-pb';pb.textContent=pos;pb.onclick=()=>{pp.querySelectorAll('.j-pb').forEach(b=>b.classList.remove('on'));pb.classList.add('on');if(snackRow)snackRow.remove();snackRow=document.createElement('div');snackRow.className='j-sr';const sl=document.createElement('div');sl.className='j-sl';sl.textContent='Snack';snackRow.appendChild(sl);const si=document.createElement('input');si.className='j-si';si.type='text';si.placeholder='e.g. almonds, rice cakes...';snackRow.appendChild(si);const rb=document.createElement('button');rb.className='j-rs';rb.textContent='✕';rb.onclick=()=>{snackRow.remove();snackRow=null;pp.classList.remove('on');pp.querySelectorAll('.j-pb').forEach(b=>b.classList.remove('on'));};snackRow.appendChild(rb);const map={'After breakfast':'Breakfast','After lunch':'Lunch','After dinner':'Dinner'};els[map[pos]].after(snackRow);};pp.appendChild(pb);});block.appendChild(sb);block.appendChild(pp);c.appendChild(block);});}
-function buildMood(){const labelsEl=document.getElementById('jmoodlabels');const colsEl=document.getElementById('jmoodcols');labelsEl.innerHTML='';colsEl.innerHTML='';FACES.forEach(f=>{const lbl=document.createElement('div');lbl.className='j-moodlabel';lbl.textContent=f.label;labelsEl.appendChild(lbl);});['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d=>{const col=document.createElement('div');col.className='j-moodcol';const dlbl=document.createElement('div');dlbl.className='j-mooddaylbl';dlbl.textContent=d;col.appendChild(dlbl);FACES.forEach(f=>{const btn=document.createElement('button');btn.className='j-moodbtn';btn.innerHTML=f.svg;btn.title=f.label;btn.onclick=()=>{const wasOn=btn.classList.contains('on');col.querySelectorAll('.j-moodbtn').forEach(b=>b.classList.remove('on'));if(!wasOn)btn.classList.add('on');};col.appendChild(btn);});colsEl.appendChild(col);});}
+function buildMeals(data){const c=document.getElementById('jdays');c.innerHTML='';Object.entries(MEALS).forEach(([day,ph])=>{const dd=data&&data[day]?data[day]:null;const block=document.createElement('div');block.className='j-db';const title=document.createElement('div');title.className='j-dt';title.textContent=day;block.appendChild(title);const els={};['Breakfast','Lunch','Dinner'].forEach(meal=>{const row=document.createElement('div');row.className='j-mr';const lbl=document.createElement('div');lbl.className='j-ml';lbl.textContent=meal;row.appendChild(lbl);const wrap=document.createElement('div');wrap.className='j-mw';const inp=document.createElement('input');inp.className='j-mi';inp.type='text';inp.placeholder=ph[meal];wrap.appendChild(inp);const fb=document.createElement('button');fb.className='j-fb';fb.textContent='Fasting';const ub=document.createElement('button');ub.className='j-ub';ub.textContent='undo';fb.onclick=()=>{inp.value='Fasting';inp.readOnly=true;inp.classList.add('fasting');fb.style.display='none';ub.classList.add('on');};ub.onclick=()=>{inp.value='';inp.readOnly=false;inp.classList.remove('fasting');fb.style.display='';ub.classList.remove('on');inp.focus();};wrap.appendChild(fb);wrap.appendChild(ub);row.appendChild(wrap);els[meal]=row;block.appendChild(row);if(dd&&dd[meal]){if(dd[meal].fast){inp.value='Fasting';inp.readOnly=true;inp.classList.add('fasting');fb.style.display='none';ub.classList.add('on');}else if(dd[meal].v){inp.value=dd[meal].v;}}});const sb=document.createElement('button');sb.className='j-sab';sb.innerHTML='+ Add snack';const pp=document.createElement('div');pp.className='j-sp';let snackRow=null;sb.onclick=()=>{if(!snackRow)pp.classList.add('on');};const map={'After breakfast':'Breakfast','After lunch':'Lunch','After dinner':'Dinner'};function makeSnack(pos,val){pp.querySelectorAll('.j-pb').forEach(b=>b.classList.toggle('on',b.textContent===pos));if(snackRow)snackRow.remove();snackRow=document.createElement('div');snackRow.className='j-sr';snackRow.dataset.pos=pos;const sl=document.createElement('div');sl.className='j-sl';sl.textContent='Snack';snackRow.appendChild(sl);const si=document.createElement('input');si.className='j-si';si.type='text';si.placeholder='e.g. almonds, rice cakes...';si.value=val||'';snackRow.appendChild(si);const rb=document.createElement('button');rb.className='j-rs';rb.textContent='✕';rb.onclick=()=>{snackRow.remove();snackRow=null;pp.classList.remove('on');pp.querySelectorAll('.j-pb').forEach(b=>b.classList.remove('on'));};snackRow.appendChild(rb);els[map[pos]].after(snackRow);}['After breakfast','After lunch','After dinner'].forEach(pos=>{const pb=document.createElement('button');pb.className='j-pb';pb.textContent=pos;pb.onclick=()=>{makeSnack(pos,'');};pp.appendChild(pb);});block.appendChild(sb);block.appendChild(pp);c.appendChild(block);if(dd&&dd.snack&&dd.snack.pos){pp.classList.add('on');makeSnack(dd.snack.pos,dd.snack.v);}});}
+function buildMood(data){const labelsEl=document.getElementById('jmoodlabels');const colsEl=document.getElementById('jmoodcols');labelsEl.innerHTML='';colsEl.innerHTML='';FACES.forEach(f=>{const lbl=document.createElement('div');lbl.className='j-moodlabel';lbl.textContent=f.label;labelsEl.appendChild(lbl);});['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d=>{const col=document.createElement('div');col.className='j-moodcol';const dlbl=document.createElement('div');dlbl.className='j-mooddaylbl';dlbl.textContent=d;col.appendChild(dlbl);FACES.forEach((f,fi)=>{const btn=document.createElement('button');btn.className='j-moodbtn';btn.innerHTML=f.svg;btn.title=f.label;btn.onclick=()=>{const wasOn=btn.classList.contains('on');col.querySelectorAll('.j-moodbtn').forEach(b=>b.classList.remove('on'));if(!wasOn)btn.classList.add('on');};if(data&&data[d]===fi)btn.classList.add('on');col.appendChild(btn);});colsEl.appendChild(col);});}
 function buildVoice(){const c=document.getElementById('jvcats');c.innerHTML='';Object.keys(QUOTES).forEach(cat=>{const btn=document.createElement('button');btn.className='j-vcat';btn.textContent=cat;btn.onclick=()=>{document.querySelectorAll('.j-vcat').forEach(b=>b.classList.remove('on'));btn.classList.add('on');const qs=QUOTES[cat];const q=qs[Math.floor(Math.random()*qs.length)];curQ=q;document.getElementById('jvquote').innerHTML='<div class="j-vrule"></div><p class="j-vqtext">\u201c'+q+'\u201d</p><div class="j-vrule"></div>';document.getElementById('jvsave').classList.add('on');};c.appendChild(btn);});}
 function jSave(){if(!curQ)return;savedQ.unshift(curQ);document.getElementById('jsavedsec').style.display='block';document.getElementById('jsavedlist').innerHTML=savedQ.map(q=>'<div class="j-saveditem">\u201c'+q+'\u201d</div>').join('');document.getElementById('jvsave').classList.remove('on');}
 function updateMoney(){const m=parseFloat(document.getElementById('jmonthly').value.replace(/[$,]/g,''))||0;let bills=0;['jn1','jn2','jn3'].forEach(id=>{bills+=parseFloat(document.getElementById(id).value.replace(/[$,]/g,''))||0;});const wi=(m-bills)/4.33;document.getElementById('jweeklyinc').textContent=m?'$'+Math.max(0,wi).toFixed(0):'—';const budget=parseFloat(document.getElementById('jbudget').value.replace(/[$,]/g,''))||0;let total=0;['jc1','jc2','jc3','jc4'].forEach(id=>{total+=parseFloat(document.getElementById(id).value.replace(/[$,]/g,''))||0;});document.getElementById('jtotamt').textContent='$'+total.toFixed(2);const rem=budget-total;const ra=document.getElementById('jremamt');if(budget){ra.textContent=rem>=0?'$'+rem.toFixed(0):'-$'+Math.abs(rem).toFixed(0);ra.className='j-remamt'+(rem<0?' over':'');}else{ra.textContent='—';ra.className='j-remamt';}}
 document.getElementById('jmonthly').addEventListener('input',updateMoney);document.getElementById('jbudget').addEventListener('input',updateMoney);['jc1','jc2','jc3','jc4','jn1','jn2','jn3'].forEach(id=>document.getElementById(id).addEventListener('input',updateMoney));
-function jReset(){week++;document.getElementById('jwl').textContent='Week '+week;buildMeals();buildMood();}
-document.getElementById('jpw').onclick=()=>{if(week>1){week--;document.getElementById('jwl').textContent='Week '+week;}};
-document.getElementById('jnw').onclick=()=>{week++;document.getElementById('jwl').textContent='Week '+week;};
+function jReset(){go(week+1);}
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];const MEALDAYS=Object.keys(MEALS);let store={};
+function blankSnap(){return{intention:'',priorities:['','',''],macros:['','',''],meals:MEALDAYS.reduce((o,d)=>{o[d]={Breakfast:{v:'',fast:false},Lunch:{v:'',fast:false},Dinner:{v:'',fast:false},snack:{pos:'',v:''}};return o;},{}),mood:DAYS.reduce((o,d)=>{o[d]=-1;return o;},{}),sleep:['','','','','','',''],money:{monthly:'',n1:'',n2:'',n3:'',budget:'',c1:'',c2:'',c3:'',c4:''},reflect:['','','','']};}
+function readSnap(){const s=blankSnap();const ii=document.querySelector('.j-ii');if(ii)s.intention=ii.value;document.querySelectorAll('.j-pi').forEach((i,x)=>s.priorities[x]=i.value);document.querySelectorAll('.j-mac input').forEach((i,x)=>s.macros[x]=i.value);document.querySelectorAll('.j-slpinp').forEach((i,x)=>s.sleep[x]=i.value);[['monthly','jmonthly'],['n1','jn1'],['n2','jn2'],['n3','jn3'],['budget','jbudget'],['c1','jc1'],['c2','jc2'],['c3','jc3'],['c4','jc4']].forEach(([k,id])=>{const el=document.getElementById(id);if(el)s.money[k]=el.value;});document.querySelectorAll('.j-ri textarea').forEach((t,x)=>s.reflect[x]=t.value);document.querySelectorAll('#jmoodcols .j-moodcol').forEach((col,di)=>{let sel=-1;col.querySelectorAll('.j-moodbtn').forEach((b,bi)=>{if(b.classList.contains('on'))sel=bi;});s.mood[DAYS[di]]=sel;});document.querySelectorAll('#jdays .j-db').forEach((db,di)=>{const day=MEALDAYS[di];const mis=db.querySelectorAll('.j-mi');['Breakfast','Lunch','Dinner'].forEach((meal,mi)=>{const inp=mis[mi];if(inp)s.meals[day][meal]={v:inp.classList.contains('fasting')?'':inp.value,fast:inp.classList.contains('fasting')};});const sr=db.querySelector('.j-sr');if(sr){const si=sr.querySelector('.j-si');s.meals[day].snack={pos:sr.dataset.pos||'',v:si?si.value:''};}});return s;}
+function applySnap(s){const ii=document.querySelector('.j-ii');if(ii)ii.value=s.intention||'';document.querySelectorAll('.j-pi').forEach((i,x)=>i.value=s.priorities[x]||'');document.querySelectorAll('.j-mac input').forEach((i,x)=>i.value=s.macros[x]||'');document.querySelectorAll('.j-slpinp').forEach((i,x)=>i.value=s.sleep[x]||'');[['monthly','jmonthly'],['n1','jn1'],['n2','jn2'],['n3','jn3'],['budget','jbudget'],['c1','jc1'],['c2','jc2'],['c3','jc3'],['c4','jc4']].forEach(([k,id])=>{const el=document.getElementById(id);if(el)el.value=s.money[k]||'';});document.querySelectorAll('.j-ri textarea').forEach((t,x)=>t.value=s.reflect[x]||'');buildMood(s.mood);buildMeals(s.meals);updateMoney();}
+function go(target){if(target<1)return;store[week]=readSnap();week=target;document.getElementById('jwl').textContent='Week '+week;applySnap(store[week]||blankSnap());}
+document.getElementById('jpw').onclick=()=>go(week-1);
+document.getElementById('jnw').onclick=()=>go(week+1);
 buildMeals();buildMood();buildVoice();
+</script>
+<script>
+(function(){
+  var el=document.getElementById('j-her');
+  var colors=['#c9b5a0','#a08070','#7a5c48','#e8ddd4','#c9b5a0'];
+  var ci=0,x=120,y=80,vx=2.2,vy=1.7;
+  el.style.fontSize='52px';
+  el.style.position='absolute';
+  el.style.left=x+'px';
+  el.style.top=y+'px';
+
+  // Wait for element to paint so offsetWidth/offsetHeight are real
+  setTimeout(function(){
+    var elW=el.offsetWidth;
+    var elH=el.offsetHeight;
+
+    function bounce(){
+      var sw=window.innerWidth-elW;
+      var sh=window.innerHeight-elH;
+      x+=vx;y+=vy;
+      var hit=false;
+      if(x<=0){x=0;vx=Math.abs(vx);hit=true;}
+      if(x>=sw){x=sw;vx=-Math.abs(vx);hit=true;}
+      if(y<=0){y=0;vy=Math.abs(vy);hit=true;}
+      if(y>=sh){y=sh;vy=-Math.abs(vy);hit=true;}
+      if(hit){ci=(ci+1)%colors.length;el.style.color=colors[ci];}
+      el.style.left=x+'px';
+      el.style.top=y+'px';
+      requestAnimationFrame(bounce);
+    }
+    bounce();
+  },100);
+})();
 </script>
 </body>
 </html>
